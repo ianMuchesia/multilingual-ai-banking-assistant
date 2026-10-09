@@ -1,0 +1,60 @@
+# Benki Yetu chat banking simulation.  From the app\ folder:  docker compose up --build
+# Values come from app\.env (copy .env.example to .env first).
+name: benki-yetu
+
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-benki}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-benki-dev-only}
+      POSTGRES_DB: ${POSTGRES_DB:-benki}
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    ports:
+      # Published on localhost only, so a backend run outside Docker can use it.
+      - "127.0.0.1:${DB_PORT:-5432}:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    restart: unless-stopped
+
+  backend:
+    build:
+      context: ..                       # BankingAgents/, so the image can COPY intent-router/
+      dockerfile: app/backend/Dockerfile
+      args:
+        INSTALL_GEMMA: ${INSTALL_GEMMA:-true}
+    environment:
+      DATABASE_URL: postgresql+psycopg://${POSTGRES_USER:-benki}:${POSTGRES_PASSWORD:-benki-dev-only}@db:5432/${POSTGRES_DB:-benki}
+      JWT_SECRET: ${JWT_SECRET:?set JWT_SECRET in app/.env}
+      JWT_EXPIRE_MINUTES: ${JWT_EXPIRE_MINUTES:-60}
+      CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:3000}
+      ROUTER_MODE: ${ROUTER_MODE:-gemma}
+      LOG_LEVEL: ${LOG_LEVEL:-INFO}
+      HF_HOME: /hf-cache
+      HF_HUB_OFFLINE: "1"
+      TRANSFORMERS_OFFLINE: "1"
+    volumes:
+      # EmbeddingGemma weights from the host's Hugging Face cache, read-only. Never downloaded.
+      - ${HF_CACHE_DIR:?set HF_CACHE_DIR in app/.env}:/hf-cache:ro
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:${BACKEND_PORT:-8000}:8000"
+    restart: unless-stopped
+
+  frontend:
+    build: ./frontend                   # nginx on :80, proxies /api to http://backend:8000
+    depends_on:
+      backend:
+        condition: service_started
+    ports:
+      - "3000:80"
+    restart: unless-stopped
+
+volumes:
+  db-data:

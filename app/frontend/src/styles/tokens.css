@@ -1,0 +1,112 @@
+/* ==========================================================================
+   Benki Yetu design tokens: the ONLY place colours, fonts, spacing, radii and
+   shadows are defined. Components reference var(--role) names only.
+
+   SOURCE: colour roles and values are copied VERBATIM from
+     IanMuchesia/packages/theme/src/tokens.ts (lightColors / darkColors)
+   with the same roles: background, surface, border, accent, brand, content,
+   content-muted. Fonts and pageMaxWidth follow the same file; theme switching
+   follows packages/theme/src/theme-mode.ts (data-theme on <html>).
+
+   Usage rules (from the theme): ivory is the environment, charcoal is the
+   structure, amber is the signal.
+     --brand   large accents and headings only (3.8:1 in light, never small text)
+     --accent  links, small amber text, primary buttons, focus ring, AI labels
+     --content-muted  dates, captions, metadata
+
+   ADDITIONS for banking (not in the source theme): --positive, --negative,
+   --warning only. Chosen to sit quietly in the warm palette; contrast checked
+   (WCAG) against background / surface:
+     light  positive #4F6B1E 5.5:1   negative #A2392B 6.1:1   warning #85600A 5.2:1
+     dark   positive #A3BE6C 9.1:1   negative #E88A78 7.5:1   warning #D8B24E 9.3:1
+   Money in uses --positive; money out stays --content.
+
+   To change the palette: edit the two palette blocks below (light on :root,
+   dark under [data-theme="dark"]). Tints are derived with color-mix, so no
+   other file needs to change.
+   ========================================================================== */
+
+:root,
+[data-theme="light"] {
+  color-scheme: light;
+
+  /* verbatim from tokens.ts lightColors */
+  --background: #f7f4ee; /* ivory: the page */
+  --surface: #fbf9f5; /* raised panels: cards, inputs */
+  --border: #e4ded3; /* dividers and card edges */
+  --accent: #9a4c10; /* amber text: links, small amber text (5.6:1) */
+  --brand: #c2621a; /* brand amber: large accents, headings only */
+  --content: #171717; /* charcoal: body text (16.3:1) */
+  --content-muted: #6b665e; /* warm gray: metadata (5.2:1) */
+
+  /* additions (banking status) */
+  --positive: #4f6b1e;
+  --negative: #a2392b;
+  --warning: #85600a;
+}
+
+[data-theme="dark"] {
+  color-scheme: dark;
+
+  /* verbatim from tokens.ts darkColors */
+  --background: #121110;
+  --surface: #1a1917;
+  --border: #2c2a26;
+  --accent: #e08a3c;
+  --brand: #e08a3c;
+  --content: #ede8df;
+  --content-muted: #a39d92;
+
+  /* additions (banking status) */
+  --positive: #a3be6c;
+  --negative: #e88a78;
+  --warning: #d8b24e;
+}
+
+:root {
+  /* derived tints (no new hues) */
+  --surface-2: color-mix(in srgb, var(--border) 35%, var(--surface));
+  --accent-soft: color-mix(in srgb, var(--accent) 10%, var(--surface));
+  --positive-soft: color-mix(in srgb, var(--positive) 12%, var(--surface));
+  --negative-soft: color-mix(in srgb, var(--negative) 12%, var(--surface));
+  --warning-soft: color-mix(in srgb, var(--warning) 14%, var(--surface));
+  --scrim: color-mix(in srgb, #000 45%, transparent);
+
+  /* typography: IBM Plex only (Sans 400/600, Serif 400 + italic, Mono 400/500) */
+  --font-sans: "IBM Plex Sans", system-ui, -apple-system, sans-serif;
+  --font-serif: "IBM Plex Serif", Georgia, serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", monospace;
+
+  /* layout (pageMaxWidth from tokens.ts) */
+  --page-max-width: 1040px;
+  --topbar-h: 64px;
+  --sidebar-w: 220px;
+  --tabbar-h: 64px;
+
+  /* 8px spacing grid */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+
+  /* shape and depth */
+  --radius-sm: 8px;
+  --radius: 12px;
+  --radius-lg: 16px;
+  --radius-pill: 999px;
+  --shadow-1: 0 1px 2px rgb(23 23 23 / 5%);
+  --shadow-2: 0 1px 2px rgb(23 23 23 / 4%), 0 8px 24px -8px rgb(23 23 23 / 12%);
+  --shadow-3: 0 2px 6px rgb(23 23 23 / 6%), 0 24px 56px -16px rgb(23 23 23 / 28%);
+
+  --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+[data-theme="dark"] {
+  --scrim: color-mix(in srgb, #000 65%, transparent);
+  --shadow-1: 0 1px 2px rgb(0 0 0 / 40%);
+  --shadow-2: 0 1px 2px rgb(0 0 0 / 40%), 0 8px 24px -8px rgb(0 0 0 / 55%);
+  --shadow-3: 0 24px 56px -16px rgb(0 0 0 / 75%);
+}

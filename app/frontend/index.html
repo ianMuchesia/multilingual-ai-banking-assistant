@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="description" content="Benki Yetu: banking that understands you, in English, Kiswahili and Sheng." />
+    <title>Benki Yetu</title>
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M4 12 16 4l12 8z' fill='%23171717'/%3E%3Crect x='4' y='13' width='24' height='3' fill='%23C2621A'/%3E%3Cpath d='M7 17h3v8H7zm7.5 0h3v8h-3zM22 17h3v8h-3zM4 26h24v2.5H4z' fill='%23171717'/%3E%3C/svg%3E"
+    />
+    <!--
+      Theme init (mirrors IanMuchesia/packages/theme/src/theme-mode.ts): applies the stored mode
+      before first paint so there is no light flash. Stored choice wins; otherwise follow the
+      OS preference; otherwise light. Storage key must match config.themeStorageKey.
+    -->
+    <script>
+      (function () {
+        var d = document.documentElement;
+        try {
+          var m = localStorage.getItem("benki-yetu.theme");
+          if (m !== "light" && m !== "dark") {
+            m = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+          }
+          d.dataset.theme = m;
+        } catch (e) {
+          d.dataset.theme = "light";
+        }
+      })();
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;600&family=IBM+Plex+Serif:ital,wght@0,400;1,400&display=swap"
+    />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

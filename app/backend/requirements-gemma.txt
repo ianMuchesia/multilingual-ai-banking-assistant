@@ -1,0 +1,9 @@
+# What intent-router needs to run the EmbeddingGemma router (mirrors intent-router/requirements.txt).
+# Install torch first, CPU build:  pip install --index-url https://download.pytorch.org/whl/cpu torch torchvision
+sentence-transformers
+transformers
+scikit-learn
+numpy
+python-dotenv
+google-genai
+pillow

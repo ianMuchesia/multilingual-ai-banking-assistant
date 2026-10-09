@@ -1,0 +1,41 @@
+{
+  "disclaimer": "DEMO VALUES for the Benki Yetu simulation. These are not real limits, charges or timings of any bank.",
+  "default_topic": "overview",
+  "topics": [
+    {
+      "id": "pesalink",
+      "keywords": ["pesalink", "another bank", "other bank", "interbank", "equity", "kcb", "co-op", "ncba", "absa", "stanbic"],
+      "answer": "PesaLink sends money to an account at another Kenyan bank instantly, 24/7. Demo limits: KES 10 to KES 999,999 per transaction. Demo charges: KES 0-500: free; 501-10,000: KES 45; 10,001-100,000: KES 90; above 100,000: KES 180."
+    },
+    {
+      "id": "mpesa",
+      "keywords": ["m-pesa", "mpesa", "mobile", "wallet", "phone", "airtel"],
+      "answer": "Bank to M-Pesa sends money to any Safaricom number instantly. Demo limits: KES 10 to KES 250,000 per transaction, KES 500,000 per day. Demo charges: up to KES 1,000: KES 15; 1,001-10,000: KES 35; above 10,000: KES 55."
+    },
+    {
+      "id": "lipa_na_mpesa",
+      "keywords": ["till", "paybill", "buy goods", "lipa"],
+      "answer": "Lipa na M-Pesa pays a Buy Goods till or a Paybill (business number plus your account number at that business) instantly. Demo limit: KES 250,000 per transaction. Demo charge: free for you; the merchant pays."
+    },
+    {
+      "id": "internal",
+      "keywords": ["internal", "own account", "savings", "current", "benki yetu", "same bank", "hapa hapa"],
+      "answer": "Transfers between Benki Yetu accounts (your own or another customer's) are instant and free, 24/7. Demo limit: KES 1,000,000 per transaction."
+    },
+    {
+      "id": "rtgs",
+      "keywords": ["rtgs", "large amount", "big amount"],
+      "answer": "RTGS is for large, same-day transfers to other banks. Demo values: minimum KES 1,000,001, charge KES 500, same day if sent before 3:00 pm on a working day, otherwise next working day."
+    },
+    {
+      "id": "eft",
+      "keywords": ["eft", "cheque", "clearing"],
+      "answer": "EFT sends to other banks through clearing. Demo values: charge KES 100, arrives in 1-2 working days, no upper limit."
+    },
+    {
+      "id": "overview",
+      "keywords": [],
+      "answer": "You can send money from your Benki Yetu account to another Benki Yetu account (instant, free), to another bank via PesaLink (instant) or RTGS/EFT (larger amounts, slower), to an M-Pesa number, or pay a till/paybill. Ask about any of them for limits, charges and timings."
+    }
+  ]
+}

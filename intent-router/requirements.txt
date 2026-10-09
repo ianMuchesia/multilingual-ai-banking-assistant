@@ -1,0 +1,12 @@
+google-genai
+numpy
+python-dotenv
+sentence-transformers
+torch
+torchvision
+transformers
+pillow
+scikit-learn
+peft
+datasets
+accelerate

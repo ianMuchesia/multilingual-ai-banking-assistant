@@ -1,0 +1,15 @@
+{
+  "name": "Benki Yetu",
+  "own_bank_phrases": [
+    "benki yetu", "bank yetu",
+    "same bank", "this bank", "your bank", "here",
+    "hii bank", "hii benki", "benki hii", "bank hii", "benki hii hii",
+    "hapa hapa", "ya hapa", "hapa kwenu", "ndani ya benki"
+  ],
+  "other_banks": [
+    "equity", "kcb", "co-op", "coop", "cooperative", "ncba", "absa", "barclays", "stanbic",
+    "i&m", "dtb", "diamond trust", "family bank", "standard chartered", "stanchart",
+    "sidian", "gulf african", "prime bank", "hfc", "kingdom bank", "national bank", "postbank"
+  ],
+  "wallets": ["m-pesa", "mpesa", "airtel money", "t-kash", "tkash"]
+}

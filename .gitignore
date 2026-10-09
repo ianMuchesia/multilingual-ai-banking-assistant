@@ -1,0 +1,24 @@
+# Secrets
+.env
+.env.*
+!.env.example
+
+# Python
+.venv/
+__pycache__/
+.pytest_cache/
+
+# Node
+node_modules/
+dist/
+
+# Large or generated ML artifacts (rebuild with scripts.build_index / scripts.finetune)
+*.npz
+intent-router/cache/
+intent-router/models/
+
+# Editors / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

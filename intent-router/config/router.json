@@ -1,0 +1,27 @@
+{
+  "scoring": "logreg",
+  "k": 3,
+  "action_guard": true,
+  "rules": true,
+  "gemma": {
+    "max":       {"threshold": 0.89, "margin": 0.095},
+    "topk_mean": {"threshold": 0.80, "margin": 0.050},
+    "centroid":  {"threshold": 0.80, "margin": 0.050},
+    "logreg":    {"threshold": 0.75, "margin": 0.50},
+    "mlp":       {"threshold": 0.33, "margin": 0.20}
+  },
+  "gemma-ft": {
+    "max":       {"threshold": 0.89, "margin": 0.095},
+    "topk_mean": {"threshold": 0.80, "margin": 0.050},
+    "centroid":  {"threshold": 0.80, "margin": 0.050},
+    "logreg":    {"threshold": 0.75, "margin": 0.50},
+    "mlp":       {"threshold": 0.33, "margin": 0.20}
+  },
+  "gemini": {
+    "max":       {"threshold": 0.88, "margin": 0.035},
+    "topk_mean": {"threshold": 0.85, "margin": 0.030},
+    "centroid":  {"threshold": 0.79, "margin": 0.055},
+    "logreg":    {"threshold": 0.52, "margin": 0.40},
+    "mlp":       {"threshold": 0.12, "margin": 0.020}
+  }
+}

@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "notes": "Intent catalog for the banking intent router. 'category' drives routing policy: view = read-only, action = moves money (always needs confirmation), info = how-to / help, none = fallback.",
+  "intents": [
+    {
+      "id": "balance_inquiry",
+      "category": "view",
+      "requires_confirmation": false,
+      "description": "Customer wants to know how much money is currently in an account.",
+      "includes": ["current balance", "available balance", "how much do I have"],
+      "excludes": ["list of transactions (mini_statement)", "balance at a past date (full_statement)"],
+      "slots": ["account?"]
+    },
+    {
+      "id": "mini_statement",
+      "category": "view",
+      "requires_confirmation": false,
+      "description": "Customer wants a short list of their most recent transactions (roughly the last 5-10).",
+      "includes": ["last few transactions", "recent activity", "what came in or went out lately"],
+      "excludes": ["a statement for a date range (full_statement)", "one specific transaction (find_transaction)"],
+      "slots": ["account?"]
+    },
+    {
+      "id": "full_statement",
+      "category": "view",
+      "requires_confirmation": false,
+      "description": "Customer wants a complete statement for a period, usually as a document (PDF) to their own registered email or for download.",
+      "includes": ["statement for last 3/6 months", "bank statement for a loan/visa application", "statement PDF"],
+      "excludes": ["sending a statement to a third party (unsupported in v1)", "just the last few transactions (mini_statement)"],
+      "slots": ["account?", "start_date", "end_date", "delivery_channel?"]
+    },
+    {
+      "id": "find_transaction",
+      "category": "view",
+      "requires_confirmation": false,
+      "description": "Customer is looking for one specific past transaction, identified by date, amount, person or reference.",
+      "includes": ["money someone sent me yesterday", "did my salary come in", "the 5,000 I paid on Monday", "check status of a transfer I made"],
+      "excludes": ["proof/receipt document for it (view_receipt)", "making a new transfer"],
+      "slots": ["date?", "amount?", "counterparty?", "reference?", "direction?"]
+    },
+    {
+      "id": "view_receipt",
+      "category": "view",
+      "requires_confirmation": false,
+      "description": "Customer wants the receipt or proof of payment for a completed transaction.",
+      "includes": ["proof of payment", "download receipt", "transaction confirmation to show someone"],
+      "excludes": ["searching for whether a transaction happened (find_transaction)"],
+      "slots": ["transaction_ref?", "date?", "amount?"]
+    },
+    {
+      "id": "internal_transfer",
+      "category": "action",
+      "requires_confirmation": true,
+      "description": "Customer wants to move money between their own accounts or to another customer of the same bank.",
+      "includes": ["move money from savings to current", "send to another account in this bank"],
+      "excludes": ["sending to another bank or mobile wallet (external_transfer)", "asking how transfers work (transfer_help)"],
+      "slots": ["from_account", "to_account", "amount"]
+    },
+    {
+      "id": "external_transfer",
+      "category": "action",
+      "requires_confirmation": true,
+      "description": "Customer wants to send money out of the bank: to another bank (PesaLink/EFT/RTGS) or to a mobile wallet number.",
+      "includes": ["send to Equity/KCB/other bank", "PesaLink", "bank to M-Pesa number"],
+      "excludes": ["paying a till or paybill (lipa_na_mpesa)", "same-bank transfers (internal_transfer)"],
+      "slots": ["from_account", "destination_type", "destination", "amount"]
+    },
+    {
+      "id": "lipa_na_mpesa",
+      "category": "action",
+      "requires_confirmation": true,
+      "description": "Customer wants to pay a merchant or biller via Lipa na M-Pesa: Buy Goods (till number) or Paybill (business number + account).",
+      "includes": ["pay till", "pay paybill", "pay KPLC/water/school fees via paybill"],
+      "excludes": ["sending to a person's phone number (external_transfer)"],
+      "slots": ["from_account", "payment_type", "till_or_paybill", "account_number?", "amount"]
+    },
+    {
+      "id": "transfer_help",
+      "category": "info",
+      "requires_confirmation": false,
+      "description": "Customer is asking HOW transfers/payments work, their limits, charges or timings, without asking to perform one now.",
+      "includes": ["how do I send to another bank", "what is the PesaLink limit", "how much does RTGS cost", "how long does EFT take"],
+      "excludes": ["actually performing a transfer (internal_transfer / external_transfer / lipa_na_mpesa)"],
+      "slots": ["topic?"]
+    },
+    {
+      "id": "unsupported",
+      "category": "none",
+      "requires_confirmation": false,
+      "description": "Anything outside the catalog: loans, cards, account opening, complaints, fraud reports, chit-chat. Never forced into the nearest intent.",
+      "includes": ["apply for a loan", "my card is blocked", "I think I've been scammed", "hello"],
+      "excludes": [],
+      "slots": []
+    }
+  ]
+}

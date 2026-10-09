@@ -1,0 +1,16 @@
+# BuildKit reads this file (named after the Dockerfile) instead of BankingAgents/.dockerignore.
+# The build context is BankingAgents/; keep it small and keep secrets out.
+**/.git
+**/.venv
+**/venv
+**/__pycache__
+**/*.pyc
+**/.pytest_cache
+**/.env
+**/node_modules
+app/frontend
+intent-router/eval
+intent-router/notes
+intent-router/scripts
+intent-router/cache/*
+!intent-router/cache/gemma_768.npz
