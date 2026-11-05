@@ -164,6 +164,43 @@ Output: a report per scoring method (LOO-train vs test, per language, confusion 
 
 With 50 test sentences, one error moves a score by 2% (10% for a 10-sentence language). Treat small gaps between methods as noise.
 
+
+## Latency budget
+
+**Target:** p99 under 20 ms per message for the local path, on a laptop CPU with 4 threads, batch size 1.
+
+Why this number:
+
+- An inline check runs on every message, so its time is added to every request.
+- 10–20 ms is a realistic budget for an inline guardrail. 20 ms is a planning target I chose, not a client requirement.
+- Batch size 1, because a customer should not wait for other messages to arrive.
+- p99, not the mean, because the mean hides the slow messages.
+
+**Baseline (gemma + logreg, 2026-11-05, i7-1185G7, 4 threads, 500 messages):**
+
+| Stage | p50 | p95 | p99 | max |
+|---|---|---|---|---|
+| embed | 103.41 ms | 121.70 ms | 134.59 ms | 150.65 ms |
+| score | 0.39 ms | 0.42 ms | 0.60 ms | 0.63 ms |
+| rules + decide | 0.05 ms | 0.20 ms | 0.25 ms | 0.33 ms |
+| **total** | **103.85 ms** | **122.28 ms** | **135.26 ms** | **151.28 ms** |
+
+Result: p99 is about 7 times over budget. Almost all the time is embed, so the encoder must get smaller and faster.
+
+Batching (same 320 messages at each size):
+
+| Batch size | Time per batch | Messages per second |
+|---|---|---|
+| 1 | 102.4 ms | 9.8 |
+| 8 | 414.8 ms | 19.3 |
+| 32 | 1,923.8 ms | 16.6 |
+
+Batching raises throughput, but it does not help this budget, because each customer waits for the whole batch.
+
+Latency changes with what else the machine is running, so close other apps before comparing runs. Full results: `eval/latency/gemma_2026-11-05.json`.
+
+
+
 ## Fine-tuning
 
 `scripts.finetune` fine-tunes EmbeddingGemma SetFit-style: pairs of training sentences, same intent = positive (cosine pulled to 1), different intent = negative (pushed to 0), with the same `task: classification | query: ` prefix the router uses. LoRA by default (`--full` for full fine-tuning). The result is the `gemma-ft` backend; settings are in `FinetuneConfig` in `src/config.py`.
