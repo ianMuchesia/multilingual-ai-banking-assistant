@@ -262,3 +262,35 @@ The bank is now the fictional **Benki Yetu** (`config/bank.json`). Before this, 
 - **Swahili** is the weakest language (77%).
 - **lipa_na_mpesa:** 6/30 mistaken for transfers (no new training data). **unsupported:** 21/30 (the rest pulled towards real intents, but sent to the LLM).
 - Gemini v3 numbers are missing: the free tier's daily quota ran out (~1,000+ embedding calls in a day).
+
+
+
+## Step 1.3: First LoRA fine-tune (2026-11-06)
+
+Setup: r=16, alpha=32, 1 epoch, 5 pair rounds, 1.83% trainable, 2.5 min on a T4.
+
+| | gemma | gemma-ft, run 1 | gemma-ft, run 2 |
+|---|---|---|---|
+| Threshold / margin | 0.75 / 0.50 | 0.91 / 0.50 | 0.96 / 0.50 |
+| Critical on calibration | 0 | 1 | 0 |
+| Critical on exam | 0 | 0 | 0 |
+| Minor on exam | 0 | 1 | 0 |
+| Coverage on exam | 27.9% | 37.6% | 25.5% |
+| Top-1 | 86.6% | 86.9% | 86.9% |
+| Sent to LLM, already right | 175 | 148 | 183 |
+
+Paired counts: gemma-ft right and gemma wrong 24; gemma right and gemma-ft wrong 23.
+
+Result: at zero critical errors, this run did not beat the baseline on coverage.
+Coverage moved from English (44 to 27) to Kiswahili (17 to 24) and Sheng (22 to 25).
+These language changes are small and could be noise.
+
+Run 1 is rejected: it had 1 critical error on calibration. The search range stopped
+at 0.95, so I extended it to 0.99 and chose again. The exam was used twice because of this.
+
+One sentence set the bar: "pay my friend using their account number 011002233"
+(internal_transfer predicted as lipa_na_mpesa, score 0.956). With 125 calibration
+sentences, one sentence can move the result a lot.
+
+Not done: reading every changed sentence, and the 1.3d settings experiments.
+

@@ -13,65 +13,65 @@
   "rules": true,
   "model_id": "google/embeddinggemma-2+ft-lora@2026-11-06T04:05:58",
   "chosen": {
-    "threshold": 0.91,
+    "threshold": 0.96,
     "margin": 0.5,
-    "zero_critical_found": false
+    "zero_critical_found": true
   },
   "train_heldout": {
     "n": 125,
     "top1_accuracy": 0.816,
-    "coverage": 0.384,
-    "accuracy_on_covered": 0.9583333333333334,
-    "critical": 1,
-    "minor": 1,
-    "llm_rate": 0.616,
-    "llm_count": 77,
-    "llm_correct_top1": 56
+    "coverage": 0.216,
+    "accuracy_on_covered": 1.0,
+    "critical": 0,
+    "minor": 0,
+    "llm_rate": 0.784,
+    "llm_count": 98,
+    "llm_correct_top1": 75
   },
   "test": {
     "n": 298,
     "top1_accuracy": 0.8691275167785235,
-    "coverage": 0.37583892617449666,
-    "accuracy_on_covered": 0.9910714285714286,
+    "coverage": 0.2550335570469799,
+    "accuracy_on_covered": 1.0,
     "critical": 0,
-    "minor": 1,
-    "llm_rate": 0.6241610738255033,
-    "llm_count": 186,
-    "llm_correct_top1": 148
+    "minor": 0,
+    "llm_rate": 0.7449664429530202,
+    "llm_count": 222,
+    "llm_correct_top1": 183
   },
   "test_by_language": {
     "en": {
       "n": 98,
       "top1_accuracy": 0.9183673469387755,
-      "coverage": 0.35714285714285715,
+      "coverage": 0.2755102040816326,
       "accuracy_on_covered": 1.0,
       "critical": 0,
       "minor": 0,
-      "llm_rate": 0.6428571428571429,
-      "llm_count": 63,
-      "llm_correct_top1": 55
+      "llm_rate": 0.7244897959183674,
+      "llm_count": 71,
+      "llm_correct_top1": 63
     },
     "sw": {
       "n": 100,
       "top1_accuracy": 0.81,
-      "coverage": 0.38,
+      "coverage": 0.24,
       "accuracy_on_covered": 1.0,
       "critical": 0,
       "minor": 0,
-      "llm_rate": 0.62,
-      "llm_count": 62,
-      "llm_correct_top1": 43
+      "llm_rate": 0.76,
+      "llm_count": 76,
+      "llm_correct_top1": 57
     },
     "sheng": {
       "n": 100,
       "top1_accuracy": 0.88,
-      "coverage": 0.39,
-      "accuracy_on_covered": 0.9743589743589743,
+      "coverage": 0.25,
+      "accuracy_on_covered": 1.0,
       "critical": 0,
-      "minor": 1,
-      "llm_rate": 0.61,
-      "llm_count": 61,
-      "llm_correct_top1": 50
+      "minor": 0,
+      "llm_rate": 0.75,
+      "llm_count": 75,
+      "llm_correct_top1": 63
     }
   },
   "test_confusion": {

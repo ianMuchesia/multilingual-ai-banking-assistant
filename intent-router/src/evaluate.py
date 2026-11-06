@@ -50,7 +50,7 @@ def _grid(start: float, stop: float, step: float) -> np.ndarray:
 # (thresholds, margins) per score scale. Cosine scores cluster tightly; probabilities spread over 0..1.
 SWEEP_GRIDS = {
     "cosine": (_grid(0.50, 0.95, 0.01), _grid(0.0, 0.10, 0.005)),
-    "probability": (_grid(0.10, 0.95, 0.01), _grid(0.0, 0.50, 0.02)),
+    "probability": (_grid(0.10, 0.99, 0.01), _grid(0.0, 0.50, 0.02)),
 }
 
 
