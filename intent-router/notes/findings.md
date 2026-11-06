@@ -294,3 +294,41 @@ sentences, one sentence can move the result a lot.
 
 Not done: reading every changed sentence, and the 1.3d settings experiments.
 
+
+## Step 1.3d: Settings compared on calibration only (2026-11-06)
+
+Rule set before the runs: pick the most coverage at zero critical errors on calibration,
+and a run must beat 21.6% by at least 3 sentences. The Colab runs never built an exam index.
+
+| Run | Top-1 | Dials | Coverage | Critical | Minor |
+|---|---|---|---|---|---|
+| LoRA, 1 epoch, 5 rounds | 81.6% | 0.96 / 0.50 | 21.6% | 0 | 0 |
+| A: LoRA, 2 epochs | 84.8% | 0.99 / 0.50 | 1.6% | 0 | 0 |
+| B: LoRA, 10 rounds | 85.6% | 0.97 / 0.50 | 57.6% | 0 | 0 |
+| C: full fine-tune | 88.0% | 0.34 / 0.26 | 78.4% | 0 | 4 |
+
+Run C won under the rule, so it took the exam once:
+
+| | gemma | LoRA run 2 | Full run C |
+|---|---|---|---|
+| Top-1 | 86.6% | 86.9% | 88.3% |
+| Coverage | 27.9% | 25.5% | 81.5% |
+| Critical | 0 | 0 | 2 |
+| Minor | 0 | 0 | 7 |
+| Accuracy on covered | 100% | 100% | 96.3% |
+
+Run C fails the zero-critical rule, so it is rejected and not re-tuned. Its critical errors:
+- "maze kuna mtu ameniscam na fake M-Pesa message" (scam report treated as find_transaction, score 0.475)
+- "nawezaje kurudishiwa makato ya Fuliza?" (unsupported treated as find_transaction, score 0.473)
+
+Lessons:
+- Zero critical errors on 125 calibration sentences did not predict zero on the exam.
+- Calibration coverage swung from 1.6% to 78.4% across small recipe changes, so it is unstable.
+  The likely next fix is more held-out data, plus more unsupported and fraud examples. Not yet tested.
+- choose() ignores minor errors. Run C had 4 on calibration and 7 on the exam.
+- Run C used logreg C=0.1 (timid), not C=10. That explains its low scores and low threshold.
+  Its low scores on wrong answers do not show it is safer: its critical errors scored about 0.47.
+- Run B was never examined. It is the best LoRA option if I return to this.
+
+Decision: keep gemma as the safe baseline. gemma-ft stays on LoRA run 2 with dials 0.96 / 0.50.
+The exam has now been used three times for gemma-ft, so it is no longer untouched.
