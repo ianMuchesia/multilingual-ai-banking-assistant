@@ -332,3 +332,51 @@ Lessons:
 
 Decision: keep gemma as the safe baseline. gemma-ft stays on LoRA run 2 with dials 0.96 / 0.50.
 The exam has now been used three times for gemma-ft, so it is no longer untouched.
+
+## Step 1.4: ONNX + INT8 (2026-11-10)
+
+Model: gemma-ft (LoRA run 2), merged (cosine 1.000000 on 50 sentences), exported with
+torch.onnx.export (Optimum did not work with transformers 5.22), then dynamic INT8 on MatMul only.
+Quantising every op dropped the lowest cosine to 0.50, so the embedding table stays 32-bit.
+INT8 embeds one text per call: in a padded batch, a sentence's vector changed with its neighbours.
+
+| | Size | Cosine vs merged (100 train sentences) |
+|---|---|---|
+| ONNX fp32 | 1,086 MB | mean 1.0000, min 1.0000 |
+| ONNX INT8, MatMul only | 677 MB | mean 0.9595, min 0.8216 |
+
+Drift, gemma-ft vs gemma-ft-int8 (mean cosine):
+
+| | English | Kiswahili | Sheng |
+|---|---|---|---|
+| Train | 0.967 | 0.947 | 0.950 |
+| Exam | 0.960 | 0.933 | 0.947 |
+
+Most-drifted exam sentence: "nadhani nimedanganywa kupitia ujumbe bandia wa M-Pesa" (0.716), a fraud report.
+
+| | gemma-ft | gemma-ft-int8 |
+|---|---|---|
+| Dials (chosen on calibration) | 0.96 / 0.50 | 0.97 / 0.50 |
+| Calibration coverage | 21.6% | 16.8% |
+| Exam top-1 | 86.9% | 84.6% |
+| Exam coverage | 25.5% | 14.8% |
+| Exam critical / minor | 0 / 0 | 0 / 0 |
+| Kiswahili answered alone | 24 | 6 |
+
+Paired: INT8 right and gemma-ft wrong 7; gemma-ft right and INT8 wrong 14.
+
+Latency, same machine, back to back, 4 threads, batch 1, 500 messages (total ms):
+
+| | p50 | p95 | p99 | max |
+|---|---|---|---|---|
+| gemma (PyTorch) | 105.6 | 122.5 | 131.7 | 149.8 |
+| gemma-ft-int8 (ONNX Runtime) | 28.6 | 43.4 | 60.0 | 102.4 |
+
+Peak RAM routing one message: gemma about 2.45 GB, INT8 about 2.34 GB (only 4% less).
+
+In one sentence each:
+- Bought: p50 106 to 29 ms, p99 132 to 60 ms, file 1,086 to 677 MB; RAM barely moved.
+- Cost: top-1 down 2.3 points, critical still 0, coverage 25.5% to 14.8%, Kiswahili hit hardest.
+
+Not separated: how much of the speed-up is ONNX Runtime and how much is INT8 (fp32 ONNX not benchmarked).
+p99 is still about 3x over the 20 ms budget, so a much smaller model (Step 1.6) is the likely next lever.

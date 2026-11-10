@@ -17,6 +17,13 @@
     "logreg":    {"threshold": 0.96, "margin": 0.50},
     "mlp":       {"threshold": 0.33, "margin": 0.20}
   },
+  "gemma-ft-int8": {
+    "max":       {"threshold": 0.89, "margin": 0.095},
+    "topk_mean": {"threshold": 0.80, "margin": 0.050},
+    "centroid":  {"threshold": 0.80, "margin": 0.050},
+    "logreg":    {"threshold": 0.96, "margin": 0.50},
+    "mlp":       {"threshold": 0.33, "margin": 0.20}
+  },
   "gemini": {
     "max":       {"threshold": 0.88, "margin": 0.035},
     "topk_mean": {"threshold": 0.85, "margin": 0.030},

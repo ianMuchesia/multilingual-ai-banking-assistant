@@ -4,6 +4,7 @@
 """
 
 import json
+import sys
 
 from src.config import load_router_config, load_settings
 from src.data import load_intent_categories
@@ -12,7 +13,7 @@ from src.index import EmbeddingIndex
 from src.rules import load_bank_config
 
 
-BACKEND = "gemma-ft"
+BACKEND = sys.argv[1] if len(sys.argv) > 1 else "gemma-ft"
 SCORING = "logreg"
 
 

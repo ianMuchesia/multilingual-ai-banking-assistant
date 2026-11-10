@@ -170,7 +170,7 @@ def load_calibration(finetune: FinetuneConfig, train: EmbeddingIndex) -> set[str
         raise StaleIndexError(
             "train.json changed since fine-tuning, so the calibration split is stale. Run: python -m scripts.finetune"
         )
-    if metadata.model_id != train.model_id:
+    if train.model_id not in (metadata.model_id, f"{metadata.model_id}+onnx-int8"):
         raise StaleIndexError(
             f"the train index was built with {train.model_id}, the current fine-tuned model is {metadata.model_id}. "
             "Rebuild the indexes with build_index --force."
